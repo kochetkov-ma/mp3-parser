@@ -1,0 +1,36 @@
+apply plugin: 'groovy'
+apply plugin: 'application'
+version = '1.0'
+mainClassName = 'Run'
+ext {
+    groovyVersion = '2.4.13'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src/main/groovy']
+        }
+    }
+}
+
+dependencies {
+    compile 'org.codehaus.gpars:gpars:0.12'
+    compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
+    compile 'com.mpatric:mp3agic:0.9.1'
+}
+
+jar {
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
